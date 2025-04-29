@@ -1,54 +1,43 @@
-import { useState, useEffect } from "react";
-import { fetchProducts } from "../utils/fetchProducts";
+import { useEffect, useState } from "react";
+import { fetchProducts } from "../utils/fetchProducts.js";
+import CardComponent from "../components/CardComponent";
 
 const HomePage = () => {
-  const [products, setProducts] = useState([]); // Empty list to start
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const getProducts = async () => {
+    const loadProducts = async () => {
       try {
         const data = await fetchProducts();
         setProducts(data);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        console.error("Error loading products:", error);
       }
     };
-
-    getProducts(); // call fetch when component mounts
+    loadProducts();
   }, []);
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">All Products</h1>
+    <div className="container py-5">
+      <h1 className="text-center mb-4">Products</h1>
 
-      {/* If no products yet */}
       {products.length === 0 ? (
-        <p className="text-center">No products yet ...</p>
+        <p className="text-center">No products found...</p>
       ) : (
-        <div className="row">
+        <section className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
           {products.map((product) => (
-            <div key={product._id} className="col-md-4 mb-4">
-              <div className="card h-100">
-                <img
-                  src={product.imageUrl}
-                  className="card-img-top"
-                  alt={product.productName}
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{product.productName}</h5>
-                  <p className="card-text">{product.productDescription}</p>
-                  <p className="card-text fw-bold">${product.price}</p>
-                </div>
-              </div>
-            </div>
+            <CardComponent
+              key={product._id}
+              title={product.productName}
+              description={product.productDescription}
+              price={product.price}
+              imageUrl={product.imageUrl}
+            />
           ))}
-        </div>
+        </section>
       )}
     </div>
   );
 };
 
 export default HomePage;
-
-  
