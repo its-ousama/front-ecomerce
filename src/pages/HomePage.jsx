@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../utils/fetchProducts.js";
+import { fetchProducts } from "../utils/fetchProducts";
 import CardComponent from "../components/CardComponent";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -17,6 +18,11 @@ const HomePage = () => {
     loadProducts();
   }, []);
 
+  const handleAddToCart = (product) => {
+    setCart((prevCart) => [...prevCart, product]);
+    alert(`${product.productName} added to cart`);
+  };
+
   return (
     <div className="container py-5">
       <h1 className="text-center mb-4">Products</h1>
@@ -28,14 +34,32 @@ const HomePage = () => {
           {products.map((product) => (
             <CardComponent
               key={product._id}
+              product={product}
               title={product.productName}
               description={product.productDescription}
               price={product.price}
               imageUrl={product.imageUrl}
+              onAddToCart={handleAddToCart}
             />
           ))}
         </section>
       )}
+
+      {/* Preview Cart Below */}
+      <div className="mt-5">
+        <h3>Cart Preview</h3>
+        {cart.length === 0 ? (
+          <p>No items yet</p>
+        ) : (
+          <ul className="list-group">
+            {cart.map((item, index) => (
+              <li key={index} className="list-group-item">
+                {item.productName} - ${item.price}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
