@@ -6,6 +6,10 @@ const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
 
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userCartKey = user ? `cart_${user.email}` : null;
+
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -15,11 +19,21 @@ const HomePage = () => {
         console.error("Error loading products:", error);
       }
     };
+
     loadProducts();
+
+    if (userCartKey) {
+      const storedCart = JSON.parse(localStorage.getItem(userCartKey)) || [];
+      setCart(storedCart);
+    }
   }, []);
 
   const handleAddToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
+    const updatedCart = [...cart, product];
+    setCart(updatedCart);
+    if (userCartKey) {
+      localStorage.setItem(userCartKey, JSON.stringify(updatedCart));
+    }
     alert(`${product.productName} added to cart`);
   };
 
@@ -44,22 +58,6 @@ const HomePage = () => {
           ))}
         </section>
       )}
-
-      {/* Preview Cart Below */}
-      <div className="mt-5">
-        <h3>Cart Preview</h3>
-        {cart.length === 0 ? (
-          <p>No items yet</p>
-        ) : (
-          <ul className="list-group">
-            {cart.map((item, index) => (
-              <li key={index} className="list-group-item">
-                {item.productName} - ${item.price}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </div>
   );
 };

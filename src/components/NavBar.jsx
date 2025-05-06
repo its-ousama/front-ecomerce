@@ -1,5 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { House, PlusSquare, BoxArrowRight, BoxArrowInRight, PersonPlus } from "react-bootstrap-icons";
+import {
+  House,
+  PlusSquare,
+  BoxArrowRight,
+  BoxArrowInRight,
+  PersonPlus,
+} from "react-bootstrap-icons";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -33,7 +39,10 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav mx-auto gap-4">
             <li className="nav-item">
-              <Link className="nav-link d-flex flex-column align-items-center" to="/">
+              <Link
+                className="nav-link d-flex flex-column align-items-center"
+                to="/"
+              >
                 <House size={24} />
                 <small>Home</small>
               </Link>
@@ -41,7 +50,10 @@ const NavBar = () => {
 
             {user?.role === "admin" && (
               <li className="nav-item">
-                <Link className="nav-link d-flex flex-column align-items-center" to="/create-product">
+                <Link
+                  className="nav-link d-flex flex-column align-items-center"
+                  to="/create-product"
+                >
                   <PlusSquare size={24} />
                   <small>Create Product</small>
                 </Link>
@@ -50,6 +62,12 @@ const NavBar = () => {
           </ul>
 
           <div className="d-flex align-items-center gap-3">
+            {user && (
+              <Link className="btn btn-outline-warning" to="/cart">
+                🛒 Cart
+              </Link>
+            )}
+
             {user ? (
               <>
                 <span className="text-white me-2">Hi, {user.firstName}</span>

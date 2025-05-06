@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Pages
-import CreateProduct from "./pages/CreateProduct";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SignUpPage from "./pages/SignUpPage";
-
+import CreateProduct from "./pages/CreateProduct";
+import CartPage from "./pages/CartPage";
+import InvoicePage from "./pages/InvoicePage";
 
 //Components
 
@@ -27,6 +28,8 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/create-product" element={<CreateProduct />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/invoice" element={<InvoicePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </main>
