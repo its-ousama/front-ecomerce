@@ -28,29 +28,44 @@ const CreateProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (user?.role !== "admin") {
       setMessage("Access denied. Admins only.");
       return;
     }
-
-    const data = new FormData();
-    for (let key in formData) {
-      data.append(key, formData[key]);
-    }
-    data.append("image", image);
-
+  
     try {
+      // Upload image to Cloudinary
+      const imgData = new FormData();
+      imgData.append("file", image);
+      imgData.append("upload_preset", "your_upload_preset"); // Replace with your Cloudinary upload preset
+      imgData.append("cloud_name", "your_cloud_name"); // Replace with your Cloudinary cloud name
+  
+      const cloudRes = await fetch("https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", {
+        method: "POST",
+        body: imgData,
+      });
+  
+      const cloudData = await cloudRes.json();
+      const imageUrl = cloudData.secure_url;
+  
+      // Now send product data to your backend with Cloudinary image URL
+      const productData = {
+        ...formData,
+        imageUrl,
+      };
+  
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products/addProduct`, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: data,
+        body: JSON.stringify(productData),
       });
-
+  
       if (!res.ok) throw new Error("Product creation failed");
-
+  
       setMessage("✅ Product created successfully!");
       setFormData({
         productName: "",
@@ -61,7 +76,7 @@ const CreateProduct = () => {
         price: "",
       });
       setImage(null);
-
+  
       setTimeout(() => {
         navigate("/");
       }, 1500);

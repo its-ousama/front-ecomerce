@@ -2,12 +2,13 @@ const CardComponent = ({ title, description, price, imageUrl, product, onAddToCa
     return (
       <article className="col">
         <div className="card shadow-sm h-100">
-          <img
-            src={imageUrl || "https://via.placeholder.com/300x200"}
-            className="card-img-top"
-            alt={title}
-            style={{ minHeight: "200px", objectFit: "contain" }}
-          />
+        {console.log("Image URL:", imageUrl)}
+         <img
+          src={imageUrl || "https://via.placeholder.com/300x200"}
+          className="card-img-top"
+          alt={product.productName}
+          style={{ minHeight: "200px", objectFit: "contain" }}
+        />
           <div className="card-body d-flex flex-column justify-content-between">
             <div>
               <h5 className="card-title">{title}</h5>
